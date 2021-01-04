@@ -1,37 +1,25 @@
-// import React, { useRef, useEffect } from 'react';
-
-// class Map extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       lat: 38.71328827327413,
-//       lng: -9.142917534985767,
-//       zoom: 2,
-//     };
-//   }
-
-//   componentDidMount() {
-//     const map = new mapboxgl.Map({
-//       container: 'mapid',
-//       style: 'mapbox://styles/mapbox/streets-v11',
-//       center: [this.state.lng, this.state.lat],
-//       zoom: this.state.zoom,
-//     });
-//     console.log(map);
-//   }
-// }
-
 import React, { useState } from 'react';
-import ReactMapGL from 'react-map-gl';
+import ReactMapGL, { Marker, GeolocateControl, Popup } from 'react-map-gl';
+const flightData = require('../../server/dummyData');
+
+const geolocateStyle = {
+  float: 'left',
+  margin: '25px',
+  padding: '5px',
+};
 
 export default function Map() {
   const [viewport, setViewport] = useState({
-    lat: 38.70755,
-    long: -9.15795,
+    latitude: 38.70755,
+    longitude: -9.15795,
     width: '75vw',
     height: '75vh',
-    zoom: 3,
+    zoom: 2,
+    flightData,
   });
+
+  const [selectedAirport, setSelectedAirport] = useState(null);
+
   return (
     <div>
       <ReactMapGL
@@ -41,7 +29,42 @@ export default function Map() {
         }
         mapStyle="mapbox://styles/bethhowell123/ckjhu1rtf0scf19mmqulcv9l7"
         onViewportChange={(viewport) => setViewport(viewport)}
-      ></ReactMapGL>
+      >
+        <GeolocateControl
+          style={geolocateStyle}
+          positionOptions={{ enableHighAccuracy: true }}
+          trackUserLocation={true}
+        />
+        {[...flightData].map((flight) => (
+          <Marker
+            key={flight.flightNumber}
+            longitude={flight.origin.longitude}
+            latitude={flight.origin.latitude}
+          >
+            <button
+              className="marker-btn"
+              onClick={(evt) => {
+                evt.preventDefault();
+                setSelectedAirport(flight.origin);
+              }}
+            >
+              📍
+            </button>
+          </Marker>
+        ))}
+        {selectedAirport && (
+          <Popup
+            longitude={selectedAirport.longitude}
+            latitude={selectedAirport.latitude}
+            className="airport-popup"
+            onClose={() => {
+              setSelectedAirport(null);
+            }}
+          >
+            <div>{selectedAirport.IATA}</div>
+          </Popup>
+        )}
+      </ReactMapGL>
     </div>
   );
 }

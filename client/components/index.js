@@ -8,3 +8,4 @@ export { default as UserHome } from './user-home';
 export { default as MainPage } from './Main-Page';
 export { Login, Signup } from './auth-form';
 export { default as Map } from './Map';
+export { default as Stats } from './Stats';

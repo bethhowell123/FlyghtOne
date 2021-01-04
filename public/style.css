@@ -1,5 +1,10 @@
 body {
   font-family: sans-serif;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  background-color: aliceblue;
+  font-family: 'Roboto', sans-serif;
 }
 
 a {
@@ -13,6 +18,8 @@ label {
 nav a {
   display: inline-block;
   margin: 0.5em;
+  color: black;
+  font-size: 1rem;
 }
 
 form div {
@@ -31,4 +38,25 @@ form div {
   right: 0;
   left: 0;
   bottom: 0;
+}
+
+.marker-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.airport-popup {
+  padding: 10px;
+}
+
+h1 {
+  font-family: 'Racing Sans One', cursive;
+  font-size: 3em;
+  margin: 0px;
+}
+
+#travel-quote {
+  font-style: italic;
+  font-weight: lighter;
 }

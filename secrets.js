@@ -1,0 +1,2 @@
+REACT_APP_MAPBOX_TOKEN =
+  'pk.eyJ1IjoiYmV0aGhvd2VsbDEyMyIsImEiOiJja2o4cG93c2kzejAyMnhwMm0xc3IxYW5hIn0.Zo39oL0KBx5VGapavQigEw';

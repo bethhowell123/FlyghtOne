@@ -17,13 +17,9 @@ function getTravelQuote() {
 const MainPage = () => {
   return (
     <div>
-      <div id="welcome">
-        <h1>Welcome to FlightMappr</h1>
-      </div>
       <div id="home-page-text">
         <h3>Fly away, little bird...</h3>
         <p>{getTravelQuote()}</p>
-        <br />
         <br />
       </div>
     </div>

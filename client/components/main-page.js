@@ -56,7 +56,10 @@ const MainPage = () => {
   }, []);
 
   const [radius, setRadius] = React.useState(2);
-  const handleToggleRadius = () => setRadius(radius > 0 ? 0 : 2);
+  const handleToggleRadius = () => {
+    setRadius(radius > 0 ? 0 : 2);
+    console.log('clicked!');
+  };
 
   return (
     <div>
@@ -76,14 +79,17 @@ const MainPage = () => {
           );
         })}
       </div>
-      <Map
-        width="75vw"
-        height="75vh"
-        viewState={viewState}
-        onViewStateChange={handleChangeViewState}
-        airports={airports}
-        radius={radius}
-      />
+      <div id="map-container">
+        <Map
+          width="75vw"
+          height="75vh"
+          viewState={viewState}
+          onViewStateChange={handleChangeViewState}
+          airports={airports}
+          radius={radius}
+        />
+      </div>
+
       {/* <div id="travel-quote">
         <p>{getTravelQuote()}</p>
       </div> */}

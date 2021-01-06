@@ -41,8 +41,8 @@ export const Locations = {
   MYR: {
     latitude: 33.68906,
     longitude: -78.886696,
-    zoom: 10,
-    pitch: 47,
+    zoom: 7,
+    pitch: 30,
     bearing: 0.7,
   },
   ATL: {

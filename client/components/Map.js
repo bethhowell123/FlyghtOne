@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Spring } from 'react-spring/renderprops';
+import { DeckGL, ScatterplotLayer } from 'deck.gl';
+import { easeBackOut } from 'd3';
 
 import ReactMapGL, {
   Marker,
@@ -83,6 +85,26 @@ export default function Map({
 
   const [selectedAirport, setSelectedAirport] = useState(null);
 
+  const layers = [
+    new ScatterplotLayer({
+      id: 'scatterplot-layer',
+      data: allAirports,
+      getRadius: 4000 * radius,
+      radiusMaxPixels: 5,
+      getFillColor: [2, 188, 201],
+      pickable: true,
+      onClick: ({ object }) => console.log(object),
+      autoHighlight: true,
+      highlightColor: [0, 0, 0],
+      transitions: {
+        getRadius: {
+          duration: 750,
+          easing: easeBackOut,
+        },
+      },
+    }),
+  ];
+
   return (
     <ReactMapGL
       width={width}
@@ -100,7 +122,7 @@ export default function Map({
         positionOptions={{ enableHighAccuracy: true }}
         trackUserLocation={true}
       />
-      {[...flightData].map((flight) => (
+      {/* {[...flightData].map((flight) => (
         <Marker
           key={flight.flightNumber}
           longitude={flight.origin.longitude}
@@ -116,8 +138,8 @@ export default function Map({
             📍
           </button>
         </Marker>
-      ))}
-      {selectedAirport && (
+      ))} */}
+      {/* {selectedAirport && (
         <Popup
           longitude={selectedAirport.longitude}
           latitude={selectedAirport.latitude}
@@ -128,12 +150,14 @@ export default function Map({
         >
           <div>{selectedAirport.IATA}</div>
         </Popup>
-      )}
-      <Spring from={{ radius: 0 }} to={{ radius }}>
+      )} */}
+      <DeckGL viewState={viewState} layers={layers} />
+
+      {/* <Spring from={{ radius: 0 }} to={{ radius }}>
         {(springProps) => (
           <SvgOverlay airports={ausAirports} radius={springProps.radius} />
         )}
-      </Spring>
+      </Spring> */}
     </ReactMapGL>
   );
 }

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Spring } from 'react-spring/renderprops';
+
 import ReactMapGL, {
   Marker,
   GeolocateControl,
@@ -13,13 +15,71 @@ const geolocateStyle = {
   padding: '5px',
 };
 
-export default function Map({ width, height, viewState, onViewStateChange }) {
+function SvgOverlay({ airports, radius }) {
+  const redraw = ({ project }) => {
+    return (
+      <g>
+        {airports.map((airport) => {
+          const [x, y] = project(airport.position);
+          return <circle key={airport.id} cx={x} cy={y} r={radius} />;
+        })}
+      </g>
+    );
+  };
+  return <SVGOverlay redraw={redraw} />;
+}
+
+export default function Map({
+  width,
+  height,
+  viewState,
+  onViewStateChange,
+  airports,
+  radius,
+}) {
   // const [viewport, setViewport] = useState({
   //   latitude: 38.70755,
   //   longitude: -9.15795,
   //   zoom: 2,
   //   flightData,
   // });
+
+  const naAirports = React.useMemo(
+    () => airports.filter((d) => d.continent === 'NA'),
+    [airports]
+  );
+  const saAirports = React.useMemo(
+    () => airports.filter((d) => d.continent === 'SA'),
+    [airports]
+  );
+
+  const europeAirports = React.useMemo(
+    () => airports.filter((d) => d.continent === 'EU'),
+    [airports]
+  );
+
+  const asiaAirports = React.useMemo(
+    () => airports.filter((d) => d.continent === 'AS'),
+    [airports]
+  );
+
+  const ausAirports = React.useMemo(
+    () => airports.filter((d) => d.country === 'AU'),
+    [airports]
+  );
+  const africaAirports = React.useMemo(
+    () => airports.filter((d) => d.continent === 'AF'),
+    [airports]
+  );
+
+  const allAirports = [
+    ...asiaAirports,
+    ...africaAirports,
+    ...europeAirports,
+    ...saAirports,
+    ...naAirports,
+    ...ausAirports,
+  ];
 
   const [selectedAirport, setSelectedAirport] = useState(null);
 
@@ -69,6 +129,11 @@ export default function Map({ width, height, viewState, onViewStateChange }) {
           <div>{selectedAirport.IATA}</div>
         </Popup>
       )}
+      <Spring from={{ radius: 0 }} to={{ radius }}>
+        {(springProps) => (
+          <SvgOverlay airports={ausAirports} radius={springProps.radius} />
+        )}
+      </Spring>
     </ReactMapGL>
   );
 }

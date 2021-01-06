@@ -33,22 +33,30 @@ const MainPage = () => {
 
   const [airports, setAirports] = useState([]);
   React.useEffect(() => {
-    csv('../../api/public/airports.csv', (d) => ({
-      id: d['id'],
-      type: d['type'],
-      country: d['iso_country'],
-      iata: d['iata_code'],
-      position: [+d['longitude_deg'], +d['latitude_deg']],
-    }))
-      // .then((airports) =>
-      //   airports.filter(
-      //     (d) => d.type === 'medium_airport' || d.type === 'large_airport'
-      //   )
-      // )
+    csv(
+      'https://raw.githubusercontent.com/bethhowell123/airportsCSV/master/airports%20(2).csv',
+      (d) => ({
+        id: d['id'],
+        type: d['type'],
+        country: d['iso_country'],
+        continent: d['continent'],
+        iata: d['iata_code'],
+        position: [+d['longitude_deg'], +d['latitude_deg']],
+      })
+    )
+      .then((airports) =>
+        airports.filter(
+          (d) => d.type === 'medium_airport' || d.type === 'large_airport'
+        )
+      )
+      .then((airports) =>
+        airports.filter((d) => d.position[0] !== null && d.position[1] !== null)
+      )
       .then(setAirports);
   }, []);
 
-  console.log(airports);
+  const [radius, setRadius] = React.useState(2);
+  const handleToggleRadius = () => setRadius(radius > 0 ? 0 : 2);
 
   return (
     <div>
@@ -56,6 +64,9 @@ const MainPage = () => {
       {/* <button id="fly-home-btn" onClick={handleFlyTo}>
         Fly Home
       </button> */}
+      <button id="toggle-airports" onClick={handleToggleRadius}>
+        View All Airports
+      </button>
       <div>
         {Object.keys(Locations).map((key) => {
           return (
@@ -70,6 +81,8 @@ const MainPage = () => {
         height="75vh"
         viewState={viewState}
         onViewStateChange={handleChangeViewState}
+        airports={airports}
+        radius={radius}
       />
       {/* <div id="travel-quote">
         <p>{getTravelQuote()}</p>

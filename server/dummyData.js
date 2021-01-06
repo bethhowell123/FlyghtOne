@@ -37,20 +37,35 @@ const flightData = [
   },
 ];
 
-const MYR = {
-  latitude: 33.68906,
-  longitude: 78.886696,
+export const Locations = {
+  MYR: {
+    latitude: 33.68906,
+    longitude: -78.886696,
+    zoom: 10,
+    pitch: 47,
+    bearing: 0.7,
+  },
+  ATL: {
+    latitude: 33.640411,
+    longitude: -84.419853,
+    zoom: 10,
+    pitch: 48,
+    bearing: 0.7,
+  },
+  JFK: {
+    latitude: 40.641766,
+    longitude: -73.780968,
+    zoom: 10,
+    pitch: 40,
+    bearing: -0.7,
+  },
+  LIS: {
+    latitude: 38.7756,
+    longitude: 9.1354,
+    zoom: 10,
+    pitch: 54,
+    bearing: -0.7,
+  },
 };
-const ATL = {
-  latitude: 33.640411,
-  longitude: -84.419853,
-};
-const JFK = {
-  latitude: 40.641766,
-  longitude: -73.780968,
-};
-const LIS = {
-  latitude: 38.7756,
-  longitude: 9.1354,
-};
-module.exports = flightData;
+
+export default flightData;

@@ -1,4 +1,6 @@
 const router = require('express').Router();
+const path = require('path');
+const fs = require('fs');
 
 router.use('/users', require('./users'));
 
@@ -15,6 +17,14 @@ router.get('/stats', (req, res, next) => {
     res.send('get stats request successful');
   } catch (err) {
     next(err);
+  }
+});
+
+router.get('/public/airports.csv', (req, res, next) => {
+  try {
+    console.log(res);
+  } catch (err) {
+    next;
   }
 });
 

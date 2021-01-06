@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Map } from './index';
+import ReactMapGL, { FlyToInterpolator } from 'react-map-gl';
+import { Locations } from '../../server/dummyData';
+import { csv } from 'd3';
 
 const travelQuotes = [
   'You need not even listen, just wait…the world will offer itself freely to you, unmasking itself. – Franz Kafka',
@@ -15,12 +18,62 @@ function getTravelQuote() {
 }
 
 const MainPage = () => {
+  const [viewState, setViewState] = useState(Locations.MYR);
+
+  const handleChangeViewState = ({ viewState }) => setViewState(viewState);
+
+  const handleFlyTo = (destination) => {
+    setViewState({
+      ...viewState,
+      ...destination,
+      transitionDuration: 2000,
+      transitionInterpolator: new FlyToInterpolator(),
+    });
+  };
+
+  const [airports, setAirports] = useState([]);
+  React.useEffect(() => {
+    csv('../../api/public/airports.csv', (d) => ({
+      id: d['id'],
+      type: d['type'],
+      country: d['iso_country'],
+      iata: d['iata_code'],
+      position: [+d['longitude_deg'], +d['latitude_deg']],
+    }))
+      // .then((airports) =>
+      //   airports.filter(
+      //     (d) => d.type === 'medium_airport' || d.type === 'large_airport'
+      //   )
+      // )
+      .then(setAirports);
+  }, []);
+
+  console.log(airports);
+
   return (
     <div>
-      <Map />
-      <div id="travel-quote">
-        <p>{getTravelQuote()}</p>
+      <button id="fly-btn">Take Flyght</button>
+      {/* <button id="fly-home-btn" onClick={handleFlyTo}>
+        Fly Home
+      </button> */}
+      <div>
+        {Object.keys(Locations).map((key) => {
+          return (
+            <button key={key} onClick={() => handleFlyTo(Locations[key])}>
+              {key}
+            </button>
+          );
+        })}
       </div>
+      <Map
+        width="75vw"
+        height="75vh"
+        viewState={viewState}
+        onViewStateChange={handleChangeViewState}
+      />
+      {/* <div id="travel-quote">
+        <p>{getTravelQuote()}</p>
+      </div> */}
     </div>
   );
 };

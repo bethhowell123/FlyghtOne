@@ -41,6 +41,7 @@
   "author": "Fullstack Academy of Code",
   "license": "MIT",
   "dependencies": {
+    "@turf/turf": "^5.1.6",
     "axios": "^0.21.1",
     "compression": "^1.7.3",
     "connect-session-sequelize": "^6.1.1",

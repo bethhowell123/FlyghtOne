@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { Spring } from 'react-spring/renderprops';
-import { DeckGL, ScatterplotLayer } from 'deck.gl';
-import { easeBackOut } from 'd3';
-
+import { DeckGL, ScatterplotLayer, GeoJsonLayer, ArcLayer } from 'deck.gl';
+import { easeBackOut, pairs, shuffle } from 'd3';
+import { lineString } from '@turf/turf';
 import ReactMapGL, {
   Marker,
   GeolocateControl,
   Popup,
   SVGOverlay,
 } from 'react-map-gl';
-import flightData from '../../server/dummyData';
+import flightData, { Locations } from '../../server/dummyData';
 
 const geolocateStyle = {
   float: 'left',
@@ -83,6 +83,22 @@ export default function Map({
     ...ausAirports,
   ];
 
+  const airportLine = React.useMemo(() => {
+    return allAirports.length
+      ? lineString(allAirports.map((d) => d.position))
+      : undefined;
+  }, [allAirports]);
+
+  // const routes = pairs(flightData);
+  // console.log([
+  //   routes[0]['origin']['latitude'],
+  //   routes[0]['origin']['longitude'],
+  // ]);
+
+  const routes = React.useMemo(() => {
+    return pairs(shuffle(allAirports).slice(0, 500));
+  }, [allAirports]);
+
   const [selectedAirport, setSelectedAirport] = useState(null);
 
   const layers = [
@@ -93,7 +109,11 @@ export default function Map({
       radiusMaxPixels: 5,
       getFillColor: [2, 188, 201],
       pickable: true,
-      onClick: ({ object }) => console.log(object),
+      onClick: ({ object }) => {
+        object.iata
+          ? console.log(`${object.iata} - ${object.name}`)
+          : console.log(`${object.name}`);
+      },
       autoHighlight: true,
       highlightColor: [0, 0, 0],
       transitions: {
@@ -102,6 +122,23 @@ export default function Map({
           easing: easeBackOut,
         },
       },
+    }),
+
+    new GeoJsonLayer({
+      id: 'geojson-layer',
+      data: airportLine,
+      lineWidthMinPixels: 0.75,
+      getLineColor: [0, 0, 0, 30],
+    }),
+
+    new ArcLayer({
+      id: 'arc-layer',
+      data: routes,
+      getSourcePosition: (d) => d[0].position,
+      getTargetPosition: (d) => d[1].position,
+      getSourceColor: [2, 188, 201],
+      getTargetColor: [85, 85, 85],
+      getWidth: 1,
     }),
   ];
 

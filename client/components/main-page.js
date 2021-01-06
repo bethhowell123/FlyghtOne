@@ -37,6 +37,7 @@ const MainPage = () => {
       'https://raw.githubusercontent.com/bethhowell123/airportsCSV/master/airports%20(2).csv',
       (d) => ({
         id: d['id'],
+        name: d['name'],
         type: d['type'],
         country: d['iso_country'],
         continent: d['continent'],
@@ -58,8 +59,13 @@ const MainPage = () => {
   const [radius, setRadius] = React.useState(2);
   const handleToggleRadius = () => {
     setRadius(radius > 0 ? 0 : 2);
-    console.log('clicked!');
   };
+
+  // const [routes, setRoutes] = React.useState(routes)
+  // const handleToggleRoutes = () => {
+  //   setRoutes(routes.length ? null : routes)
+  //   console.log('clicked!');
+  // }
 
   return (
     <div>

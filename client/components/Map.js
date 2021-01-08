@@ -130,7 +130,7 @@ export default function Map({
       id: 'geojson-layer',
       data: airportLine,
       lineWidthMinPixels: 0.5,
-      getLineColor: [0, 0, 0, 20],
+      getLineColor: [0, 0, 0, 10],
     }),
     // layer for all random routes
     // new ArcLayer({
@@ -154,7 +154,7 @@ export default function Map({
         d.destination.position[0],
       ],
       getSourceColor: [2, 188, 201],
-      getTargetColor: [85, 85, 85],
+      getTargetColor: [4, 92, 128],
       getWidth: 1,
       visible: arcsEnabled,
     }),

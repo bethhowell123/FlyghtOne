@@ -60,8 +60,8 @@ export const Locations = {
     bearing: -0.7,
   },
   LIS: {
-    latitude: 38.7756,
-    longitude: 9.1354,
+    latitude: 38.77557685108355,
+    longitude: -9.135345244470109,
     zoom: 10,
     pitch: 54,
     bearing: -0.7,

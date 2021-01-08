@@ -3,6 +3,7 @@ import { Map } from './index';
 import ReactMapGL, { FlyToInterpolator } from 'react-map-gl';
 import { Locations } from '../../server/dummyData';
 import { csv } from 'd3';
+import myFlights from '../../server/myFlights';
 
 const MainPage = () => {
   const [viewState, setViewState] = useState({
@@ -78,6 +79,17 @@ const MainPage = () => {
             </button>
           );
         })}
+        <button
+          id="random"
+          onClick={() =>
+            handleFlyTo(
+              myFlights[Math.floor(Math.random() * myFlights.length)]
+                .destination.position
+            )
+          }
+        >
+          Random
+        </button>
       </div>
       <div id="map-container">
         <Map

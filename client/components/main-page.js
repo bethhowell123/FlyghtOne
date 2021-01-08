@@ -4,21 +4,13 @@ import ReactMapGL, { FlyToInterpolator } from 'react-map-gl';
 import { Locations } from '../../server/dummyData';
 import { csv } from 'd3';
 
-const travelQuotes = [
-  'You need not even listen, just wait…the world will offer itself freely to you, unmasking itself. – Franz Kafka',
-  'The world is full of magic things, patiently waiting for our senses to grow sharper. – W.B. Yeats',
-  'The biggest adventure you can take is to live the life of your dreams. – Oprah Winfrey',
-  'May your adventures bring you closer together, even as they take you far away from home. – Trenton Lee Stewart',
-  'To live is the rarest thing in the world. Most people just exist. – Oscar Wilde',
-  'Nothing in life is to be feared, it is only to be understood. Now is the time to understand more, so that we may fear less. - Marie Curie',
-];
-
-function getTravelQuote() {
-  return travelQuotes[Math.floor(Math.random() * travelQuotes.length)];
-}
-
 const MainPage = () => {
-  const [viewState, setViewState] = useState(Locations.MYR);
+  const [viewState, setViewState] = useState({
+    latitude: 38.70755,
+    longitude: -9.15795,
+    zoom: 2,
+    pitch: 40,
+  });
 
   const handleChangeViewState = ({ viewState }) => setViewState(viewState);
 
@@ -61,11 +53,10 @@ const MainPage = () => {
     setRadius(radius > 0 ? 0 : 2);
   };
 
-  // const [routes, setRoutes] = React.useState(routes)
-  // const handleToggleRoutes = () => {
-  //   setRoutes(routes.length ? null : routes)
-  //   console.log('clicked!');
-  // }
+  const [arcsEnabled, setArcsEnabled] = React.useState(true);
+  const handleToggleArcs = () => {
+    setArcsEnabled(!arcsEnabled);
+  };
 
   return (
     <div>
@@ -74,9 +65,12 @@ const MainPage = () => {
         Fly Home
       </button> */}
       <button id="toggle-airports" onClick={handleToggleRadius}>
-        View All Airports
+        Show/Hide Airports
       </button>
-      <div>
+      <button id="toggle-arcs" onClick={handleToggleArcs}>
+        Show/Hide Routes
+      </button>
+      <div id="iata-btns">
         {Object.keys(Locations).map((key) => {
           return (
             <button key={key} onClick={() => handleFlyTo(Locations[key])}>
@@ -93,12 +87,9 @@ const MainPage = () => {
           onViewStateChange={handleChangeViewState}
           airports={airports}
           radius={radius}
+          arcsEnabled={arcsEnabled}
         />
       </div>
-
-      {/* <div id="travel-quote">
-        <p>{getTravelQuote()}</p>
-      </div> */}
     </div>
   );
 };

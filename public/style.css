@@ -1,5 +1,9 @@
+@font-face {
+  font-family: 'Skyfont';
+  src: url('./skyfont/Skyfont-NonCommercial.otf');
+}
+
 body {
-  font-family: sans-serif;
   display: flex;
   justify-content: center;
   text-align: center;
@@ -50,11 +54,12 @@ form div {
   padding: 10px;
 }
 
-h1 {
-  font-family: 'Racing Sans One', cursive;
-  font-size: 3em;
+.title {
+  font-family: 'Skyfont', cursive;
+  font-size: 100px;
   margin: 0px;
-  color: rgb(85, 85, 85);
+  color: black;
+  letter-spacing: 1px;
 }
 
 #travel-quote {
@@ -64,6 +69,7 @@ h1 {
 
 button {
   border-radius: 5px;
+  font-size: medium;
   background-color: rgb(85, 85, 85);
   color: white;
   margin: 2px;
@@ -71,4 +77,8 @@ button {
 }
 #map-container canvas {
   cursor: crosshair;
+}
+
+#iata-btns {
+  font-family: 'Skyfont';
 }

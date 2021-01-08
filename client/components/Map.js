@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Spring } from 'react-spring/renderprops';
+//import { Spring } from 'react-spring/renderprops';
 import { DeckGL, ScatterplotLayer, GeoJsonLayer, ArcLayer } from 'deck.gl';
 import { easeBackOut, pairs, shuffle } from 'd3';
 import { lineString } from '@turf/turf';
@@ -9,7 +9,8 @@ import ReactMapGL, {
   Popup,
   SVGOverlay,
 } from 'react-map-gl';
-import flightData, { Locations } from '../../server/dummyData';
+//import flightData, { Locations } from '../../server/dummyData';
+import myFlights from '../../server/myFlights';
 
 const geolocateStyle = {
   float: 'left',
@@ -17,7 +18,7 @@ const geolocateStyle = {
   padding: '5px',
 };
 
-function SvgOverlay({ airports, radius }) {
+function SvgOverlay({ airports, radius, arcsEnabled }) {
   const redraw = ({ project }) => {
     return (
       <g>
@@ -38,6 +39,7 @@ export default function Map({
   onViewStateChange,
   airports,
   radius,
+  arcsEnabled,
 }) {
   // const [viewport, setViewport] = useState({
   //   latitude: 38.70755,
@@ -96,7 +98,7 @@ export default function Map({
   // ]);
 
   const routes = React.useMemo(() => {
-    return pairs(shuffle(allAirports).slice(0, 500));
+    return pairs(shuffle(allAirports)).slice(0, 500);
   }, [allAirports]);
 
   const [selectedAirport, setSelectedAirport] = useState(null);
@@ -127,18 +129,34 @@ export default function Map({
     new GeoJsonLayer({
       id: 'geojson-layer',
       data: airportLine,
-      lineWidthMinPixels: 0.75,
-      getLineColor: [0, 0, 0, 30],
+      lineWidthMinPixels: 0.5,
+      getLineColor: [0, 0, 0, 20],
     }),
+    // layer for all random routes
+    // new ArcLayer({
+    //   id: 'arc-layer',
+    //   data: routes,
+    //   getSourcePosition: (d) => d[0].position,
+    //   getTargetPosition: (d) => d[1].position,
+    //   getSourceColor: [2, 188, 201],
+    //   getTargetColor: [85, 85, 85],
+    //   getWidth: 1,
+    //   visible: arcsEnabled,
+    // }),
 
+    //layer for my flights
     new ArcLayer({
       id: 'arc-layer',
-      data: routes,
-      getSourcePosition: (d) => d[0].position,
-      getTargetPosition: (d) => d[1].position,
+      data: myFlights,
+      getSourcePosition: (d) => [d.origin.position[1], d.origin.position[0]],
+      getTargetPosition: (d) => [
+        d.destination.position[1],
+        d.destination.position[0],
+      ],
       getSourceColor: [2, 188, 201],
       getTargetColor: [85, 85, 85],
       getWidth: 1,
+      visible: arcsEnabled,
     }),
   ];
 

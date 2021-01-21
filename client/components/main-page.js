@@ -22,6 +22,19 @@ const MainPage = () => {
       transitionDuration: 2000,
       transitionInterpolator: new FlyToInterpolator(),
     });
+    //console.log(destination);
+  };
+
+  const handleFlyToRandom = (destination) => {
+    setViewState({
+      zoom: 7,
+      pitch: 42,
+      latitude: destination[0],
+      longitude: destination[1],
+      transitionDuration: 2000,
+      transitionInterpolator: new FlyToInterpolator(),
+    });
+    //console.log(destination);
   };
 
   const [airports, setAirports] = useState([]);
@@ -54,9 +67,14 @@ const MainPage = () => {
     setRadius(radius > 0 ? 0 : 2);
   };
 
-  const [arcsEnabled, setArcsEnabled] = React.useState(true);
+  const [arcsEnabled, setArcsEnabled] = React.useState(false);
   const handleToggleArcs = () => {
     setArcsEnabled(!arcsEnabled);
+  };
+
+  const [myArcsEnabled, setMyArcsEnabled] = React.useState(true);
+  const handleToggleMyArcs = () => {
+    setMyArcsEnabled(!myArcsEnabled);
   };
 
   return (
@@ -71,6 +89,9 @@ const MainPage = () => {
       <button id="toggle-arcs" onClick={handleToggleArcs}>
         Show/Hide Routes
       </button>
+      <button id="toggle-flights" onClick={handleToggleMyArcs}>
+        Show/Hide My Flights
+      </button>
       <div id="iata-btns">
         {Object.keys(Locations).map((key) => {
           return (
@@ -82,7 +103,7 @@ const MainPage = () => {
         <button
           id="random"
           onClick={() =>
-            handleFlyTo(
+            handleFlyToRandom(
               myFlights[Math.floor(Math.random() * myFlights.length)]
                 .destination.position
             )
@@ -100,6 +121,7 @@ const MainPage = () => {
           airports={airports}
           radius={radius}
           arcsEnabled={arcsEnabled}
+          myArcsEnabled={myArcsEnabled}
         />
       </div>
     </div>

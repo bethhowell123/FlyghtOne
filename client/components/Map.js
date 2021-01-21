@@ -40,6 +40,7 @@ export default function Map({
   airports,
   radius,
   arcsEnabled,
+  myArcsEnabled,
 }) {
   // const [viewport, setViewport] = useState({
   //   latitude: 38.70755,
@@ -68,7 +69,7 @@ export default function Map({
   );
 
   const ausAirports = React.useMemo(
-    () => airports.filter((d) => d.country === 'AU'),
+    () => airports.filter((d) => d.country === 'AU' || d.country === 'NZ'),
     [airports]
   );
   const africaAirports = React.useMemo(
@@ -133,16 +134,16 @@ export default function Map({
       getLineColor: [0, 0, 0, 10],
     }),
     // layer for all random routes
-    // new ArcLayer({
-    //   id: 'arc-layer',
-    //   data: routes,
-    //   getSourcePosition: (d) => d[0].position,
-    //   getTargetPosition: (d) => d[1].position,
-    //   getSourceColor: [2, 188, 201],
-    //   getTargetColor: [85, 85, 85],
-    //   getWidth: 1,
-    //   visible: arcsEnabled,
-    // }),
+    new ArcLayer({
+      id: 'all-flights-layer',
+      data: routes,
+      getSourcePosition: (d) => d[0].position,
+      getTargetPosition: (d) => d[1].position,
+      getSourceColor: [2, 188, 201],
+      getTargetColor: [85, 85, 85],
+      getWidth: 1,
+      visible: arcsEnabled,
+    }),
 
     //layer for my flights
     new ArcLayer({
@@ -156,7 +157,7 @@ export default function Map({
       getSourceColor: [2, 188, 201],
       getTargetColor: [4, 92, 128],
       getWidth: 1,
-      visible: arcsEnabled,
+      visible: myArcsEnabled,
     }),
   ];
 
